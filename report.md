@@ -1,0 +1,29 @@
+# Module 12 Report Template
+
+## Overview of the Analysis
+
+The purpose of this analysis is to create a model that can predict whether a loan is at risk of default, using other data about the loan and borrower such as interest rate, income of the borrower, ratio of debt to income, number of accounts, number of derogatory marks, and total debt of the borrower. The dataset has over 70,000 loans to train the dataset, of which around 2500 are at risk of default, and the remaining approx 75,000 are healthy. We account for this imbalance in the creation and testing of the model by ensuring that the subset of data used to train the model includes sufficient split of the two values. <br>
+The model created is a logistic regression model, which trains on data by defining some set of features (in our case, every value we have recorded for the loan except the status) to predict some response, which is a binary category (in our case, the status of the loan as either default risk or healthy). After generating the model using the training data, we test the model using the remaining data. The purpose of testing the model with data other than the training data is to ensure that the model is sufficiently general to be able to apply to new data; if the model were tested with the same data it was trained on, it would appear deceptively accurate. <br>
+The specific tests on the model done were generating an accuracy score, a confusion matrix, and a classification report. The accuracy score (in this case, a balanced accuracy score which corrects for the fact that there are many more instances of healthy loans than default risk loans) represents the general accuracy of the test, and a value closer to 1 is better. The confusion matrix shows the rate of true and false negatives, and is better when showing higher numbers in the first and last boxes, which represent the rates of true positives and true negatives, respectively. And the classification report shows several different metrics which measure the rate of true positives in different ways, for both categories of loan status. For all of these metrics, values closer to 1 are preferred. <br>
+The second model was generated using resampled training data, meaning the data used for training the model was sampled out of, with some values not appearing and others appearing multiple times according to a random sampling structure. It is not new data but rather the earlier data with some values randomly omitted or duplicated, which is meant to account for any unintentional or invisible trends in the data which might lead the model to being less effective. After the training data was resampled, the logistic regression model was created and tested exactly the same as the first model, including using the same testing data.
+
+
+## Results
+
+Using bulleted lists, describe the balanced accuracy scores and the precision and recall scores of all machine learning models.
+
+* Machine Learning Model 1:
+  * Model 1 Balanced Accuracy Score 0.972, which is very good.
+  * Model 1 precision and recall for healthy loans: 1.00, which means that the number of false positives was so low as to let the rate of true positives relative to total positives and actual positives both round up to 1.
+  * Model 1 precision and recall for default risk loans: 0.87 and 0.95 respectively, these are not as strong as the results for the healthy loan label, and in particular indicate that there are some false positive predictions for default risk loan label (as the rate of true positive relative to the model's positive predictions is lower than the rate of true positive relative to actual positive in the dataset)
+
+
+
+* Machine Learning Model 2:
+  * Model 2 Balanced Accuracy Score 0.996, which is extremely strong
+  * Model 2 precision and recall for healthy loans: 1.00, which again means that the number of false positives was so low as to let the rate of true positives round up to 1.
+  * Model 2 precision and recall for default risk loans: 0.87 and 1.00 respectively, this indicates that the rate of correct positives for this model is very high, as the recall, which shows the rate of true positives relative to actual positives in the data, is rounded up to 1: nearly every value which is true in the data was predicted to be true by the model. However, the precision for default risk loans is still 0.87 as it was for the first model, indicating that the rate of false positive predictions has not gone down, as there are more positive predictions than true positives. 
+
+## Summary
+
+Overall, I would not recommend either of these models. Despite their stellar preformance in most metrics, they both suffer specifically from low precision scores for default risk loans, meaning they have a high rate of false positives in identifying which loans are at risk of default. It seems to me that any use of this model would revolve primarily around identifying default-risk loans specifically (as healthy loans are unlikely to warrant any further action or attention), and this is specifically the failing of both models, despite their strong performance in other areas, such as general accuracy or predicting healthy loans. If for whatever reason a model was needed to identify healthy loans (for example in considering a borrower's current loans as part of an assessment for future business) then I would recommend Model 2, as it performs extremely well for that purpose, with a very high accuracy in identifying healthy loans. However in general, both models relatively high rate of false positives in identifying default risk loans lead me to not recommend either model for general predictive use.
